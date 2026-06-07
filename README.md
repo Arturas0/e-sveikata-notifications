@@ -1,28 +1,26 @@
 # E-sveikata notifications
 
-[![N|Esveikata](https://www.esveikata.lt/img/esveikata.png)](https://ipr.esveikata.lt/)
+[![|Esveikata](https://www.esveikata.lt/img/esveikata.png)](https://ipr.esveikata.lt/)
 
 ## What it does
 Checks https://ipr.esveikata.lt for available appointments and notifies user about available spots for specialists.
 
-## Requirements 
+## Requirements
 
 - bash shell
 - [jq](https://github.com/stedolan/jq) (^1.6)
-- [LINE Notify token](https://notify-bot.line.me/en/) (requires LINE account: https://line.me/en/)
+- [Telegram bot](https://core.telegram.org/bots/tutorial) (need to create bot & chat)
 
 ## Configuration
 For notifier to work you need to set up some variable.
 ### Basic configuration
 Set up `env.conf` file with parameters for:
-`MUNICIPALITY_ID` and `PROFESSION_CODE` or `ORGANIZATION_ID`. These can be obtained from:
+`MUNICIPALITY_ID` and `PROFESSION_CODE` or `ORGANIZATION_ID`. Optionally you can set up appointments dates from to using `BOUND_LEFT` and `BOUND_RIGHT`. To get notifications about ALL possible (free and paid) appointments you can set variable `PAYMENT_TYPE` = 0, only to get FREE set variable to 1, and to show only PAID by patient visit set to 2. Needed variables can be obtained from:
 1. Visiting: https://ipr.esveikata.lt/
 2. Right click on page and select `inspect` (shortcut is `F12`) select `Network` tab
 3. Apply search filters on page and click `Ieškoti`
 4. You can filter responses by entering `times` or scroll manually until you see line near column `File` `times?municipalityId=11`, where `11` is number for selected municipality. Other filter variable will be shown after this
 5. Fill these variables in `env.conf`.
-
-Also you need to register LINE account to be able to generate `LINE Notify` token.
 
 ## Auto checking
 Using linux system can be set up using `crontab` (command `crontab -e`)
