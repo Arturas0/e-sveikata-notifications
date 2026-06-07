@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+cd "$(dirname "$0")"
 source env.conf
 
 if [ -n "${ACTIVE}" ] && [ "$ACTIVE" -eq 1 ]; then
