@@ -12,6 +12,8 @@ if [ -n "${ACTIVE}" ] && [ "$ACTIVE" -eq 1 ]; then
       url+="&organizationId=${ORGANIZATION_ID}"
     fi
 
+    LEFT_BOUND=$(date +%s)000
+
     url+="&professionCode=${PROFESSION_CODE}&paymentType=${PAYMENT_TYPE}&leftBound=${LEFT_BOUND}&rightBound=${RIGHT_BOUND}&page=${PAGE}&size=${SIZE}"
 
     reservations=$( (curl -s "$url" \
@@ -20,7 +22,11 @@ if [ -n "${ACTIVE}" ] && [ "$ACTIVE" -eq 1 ]; then
        -H "Accept-Language: en-US,en;q=0.9,lt;q=0.8" \
        -H "Accept: application/json, text/plain, */*") \
      | jq --argjson excludedHealthcareServices "${EXCLUDED_HEALTHCARE_SERVICES}" \
-       '.data | map(select(all(.healthcareServiceId; contains($excludedHealthcareServices[]) | not)))')
+          --argjson excludedOrganizationIds "${EXCLUDED_ORGANIZATION_IDS}" \
+       '.data | map(select(
+         all(.healthcareServiceId; contains($excludedHealthcareServices[]) | not)
+         and (.organizationId | IN($excludedOrganizationIds[]) | not)
+       ))')
 
     if [ ! -f esveikataDB.json ]; then
       echo '[]' > esveikataDB.json
